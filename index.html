@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: lightblue;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 10vh;
+        padding: 10px;
+      }
+      .content {
+        padding: 10px;
+      }
+      .country
+      {
+        border: none;
+        border-bottom: 1px solid blue;
+      }
+      .submit
+      {
+        background-color:black;
+        font-weight: bold;
+        color: white;
+        border: solid red 1px;
+        border-radius: 10px;
+        
+      }
+      .submit:hover
+      {
+        font-size: large;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <h1 style="font-family: cursive;margin-bottom: 10px;">Search Countries</h1>
+      <div class="flag item"></div>
+      <div class="content item">
+        <table cellspacing="10" cellpadding="5">
+            <tr>
+                <td>Name:</td>
+                <td class="name"></td>
+              </tr>
+          <tr>
+            <td>Capital:</td>
+            <td class="capital"></td>
+          </tr>
+          <tr>
+            <td>Continent:</td>
+            <td class="continent"></td>
+          </tr>
+          <tr>
+            <td>Population:</td>
+            <td class="population"></td>
+          </tr>
+          <tr>
+            <td>Currency:</td>
+            <td class="currency"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="item">
+        <input class="country" type="text" placeholder="Enter Country" />
+        <input class="submit" type="submit" value="Search"/>
+      </div>
+    </div>
+  </body>
+  <script src="./jquery.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+        $.ajax({
+            url:"https://restcountries.com/v3.1/name/india",
+            method: "GET",
+            success: function (data) {
+              $(".name").html("INDIA");
+                let flagOfCountry = `<img height='200px'
+                width='350px' src='${data[0].flags.png}' >`;
+                $(".flag").html(flagOfCountry);
+                // capital
+                let capitalOfCountry = data[0].capital[0];
+                $(".capital").html(capitalOfCountry);
+                // continent
+                let continentOfCountry = data[0].continents[0];
+                $(".continent").html(continentOfCountry);
+                // population
+                let populationOfCountry = data[0].population;
+                $(".population").html(populationOfCountry);
+                // currency
+                let currencyOfCountry = data[0].currencies;
+                let currencyName =
+                  currencyOfCountry[Object.keys(currencyOfCountry)[0]].name;
+
+                let currencySymbol =
+                  currencyOfCountry[Object.keys(currencyOfCountry)[0]].symbol;
+                let currencyDisplay = `${currencyName}(${currencySymbol})`;
+                $(".currency").html(currencyDisplay);
+                // genrating table
+               
+            
+            }
+        })
+
+
+
+      $(document).on("click", ".submit", function () {
+        let a = $(".country").val();
+        let link = `https://restcountries.com/v3.1/name/${a}`;
+        $(".name").html(a.toUpperCase());
+        if (a === "") {
+          alert("Input Cannot be Empty");
+        } else {
+          $.ajax({
+            url: link,
+            method: "GET",
+            success: function (data) {
+              
+                let flagOfCountry = `<img height='200px'
+                width='350px' src='${data[0].flags.png}' >`;
+                $(".flag").html(flagOfCountry);
+                // capital
+                let capitalOfCountry = data[0].capital[0];
+                $(".capital").html(capitalOfCountry);
+                // continent
+                let continentOfCountry = data[0].continents[0];
+                $(".continent").html(continentOfCountry);
+                // population
+                let populationOfCountry = data[0].population;
+                $(".population").html(populationOfCountry);
+                // currency
+                let currencyOfCountry = data[0].currencies;
+                let currencyName =
+                  currencyOfCountry[Object.keys(currencyOfCountry)[0]].name;
+
+                let currencySymbol =
+                  currencyOfCountry[Object.keys(currencyOfCountry)[0]].symbol;
+                let currencyDisplay = `${currencyName}(${currencySymbol})`;
+                $(".currency").html(currencyDisplay);
+                // genrating table
+               
+            
+            },
+            error:function()
+            {
+                alert("Enter valid Country Name");
+            }
+          });
+        }
+      });
+    });
+  </script>
+</html>
